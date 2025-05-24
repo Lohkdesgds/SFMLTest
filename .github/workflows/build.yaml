@@ -1,0 +1,55 @@
+name: CMake action build example test
+
+on:
+#  push:
+#    branches:
+#      - master
+  workflow_dispatch:
+    inputs:
+      make_prerelease:
+        description: Make it a pre-release
+        type: string
+        required: false
+        default: 'false'
+      bump_type:
+        description: What to bump
+        type: string
+        required: false
+        default: 'm'
+
+
+jobs:
+  build:
+    #continue-on-error: true
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:  
+      - name: Build
+        uses: LunarisLib/actions/CMake@master
+        with:
+          checkout: 'true'
+          artifact_name: ${{ matrix.os }}_PROJECT
+          
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Versioning
+        id: versioning
+        uses: LunarisLib/actions/Versioning@master
+        with:
+          kind: ${{ inputs.bump_type }}
+          project: CMAKE_PROJECT
+          
+      - name: Publish
+        uses: LunarisLib/actions/Publisher@master
+        with:
+          title: "CMake Release"
+          body: "This is a sample of a body to the example of a CMake project"
+          tag_name: ${{ steps.versioning.outputs.version }}_CMAKE
+          prerelease: ${{ inputs.make_prerelease }}
+
+
+    
