@@ -10,7 +10,7 @@ file(GLOB_RECURSE MAIN_SRCS
 )
 
 add_executable(
-    ${PROJECT_NAME}
+    ${PROJECT_NAME} WIN32
     ${MAIN_SRCS}    
 )
 
