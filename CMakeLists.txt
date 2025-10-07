@@ -50,6 +50,7 @@ FetchContent_MakeAvailable(battery-embed)
 
 # ==== SET CXX STANDARD ==== #
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # ==== INCLUDING CURL ==== #
